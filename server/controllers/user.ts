@@ -22,7 +22,9 @@ export class UserController {
   public generateNew(_: any, res: Response): any {
     rug.setSeperator("_");
     let username: string = rug.generate().toLowerCase();
-    return res.status(200).send(username);
+    return res.status(200).json({
+      username: username
+    });
   }
 
   public signup(req: Request, res: Response, next: NextFunction): any {
@@ -31,7 +33,12 @@ export class UserController {
         return next(err);
       }
 
-      return res.json(info);
+      req.login(user, err => {
+        if (err) { return next(err); }
+
+        user.lastActive = new Date();
+        return res.json(info);
+      });
     })(req, res, next);
   }
 

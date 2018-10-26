@@ -1,15 +1,15 @@
 import { User } from "./user";
-import { Api } from "./api";
+import { Room } from "./room";
 import { PassportStatic } from "passport";
 
 export class Routes {
 
   private user: User;
-  private api: Api;
+  private api: Room;
 
   constructor(passport: PassportStatic) {
     this.user = new User(passport);
-    this.api = new Api();
+    this.api = new Room();
   }
 
   public allRoutes(app: any): void {

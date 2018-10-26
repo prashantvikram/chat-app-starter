@@ -1,22 +1,41 @@
 import * as React from 'react';
+import { Component } from "react";
+// import { Switch, Route } from 'react-router-dom'
 import './App.css';
 
-import logo from './logo.svg';
+import { Layout } from 'antd';
+const { Content } = Layout;
 
-class App extends React.Component {
+// screens
+import IndexScreen from "./screens/Index";
+
+// components
+// import Home from "./components/Home";
+// import Signin from "./components/Signin";
+// import Signup from "./components/Signup";
+import AppHeader from "./components/AppHeader";
+
+export interface IProps {}
+
+export interface IState {
+  isAuthenticated: boolean
+}
+
+class App extends Component<IProps, IState> {
+  componentWillMount(){
+    // this.props.checkAuthentication()
+  }
   public render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      <Layout>
+          <AppHeader />
+        <Content>
+          <IndexScreen />
+        </Content>
+      </Layout>
     );
   }
 }
+
 
 export default App;

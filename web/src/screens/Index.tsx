@@ -1,26 +1,17 @@
 import * as React from "react";
 import { Component } from "react";
 
-import Signin from "../components/Signin";
+import AuthContext from "../auth-context";
+
+import AuthTabs from "../components/AuthTabs";
 import Home from "../components/Home";
 
-export interface IProps {}
-
-export interface IState {
-  isAuthenticated: boolean
-}
-
-class IndexPage extends Component<IProps, IState>{
-  constructor(props: IProps){
-    super(props);
-
-    this.state = {
-      isAuthenticated: false
-    }
-  }
+class IndexPage extends Component<{}, {}>{
+  static contextType = AuthContext;
   render() {
+    console.log(this.context.isAuth)
     return (
-      this.state.isAuthenticated ? <Home /> : <Signin />
+      this.context.isAuth ? <Home /> : <AuthTabs />
       
     )
   }

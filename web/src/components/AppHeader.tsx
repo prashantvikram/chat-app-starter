@@ -1,22 +1,35 @@
 import * as React from "react";
 import { Component } from "react";
 
-import { Layout } from 'antd';
-
+import { Layout, Button } from 'antd';
 const { Header } = Layout;
 
-interface IProps {
-  // history: MemoryHistory
-}
+import AuthContext from "../auth-context";
 
-interface IState {
-  // isAuthenticated: boolean
-}
-
-class AppHeader extends Component<IProps, IState>{
+class AppHeader extends Component<{}, {}>{
+  static contextType = AuthContext;
+  logout() {
+    fetch("/user/logout", {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      method: "POST",
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json)
+        this.context.toggleAuth();
+      })
+  }
   render(){
     return(
-      <Header>Header</Header>
+      <Header>
+        {this.context.isAuth ?
+          <Button onClick={this.logout.bind(this)}>Logout</Button>
+          : null
+        }
+        
+      </Header>
     )
   }
 }

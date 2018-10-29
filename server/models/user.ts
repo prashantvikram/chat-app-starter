@@ -15,7 +15,7 @@ export const UserSchema: Schema = new Schema({
     type: String,
     required: true,
     unique: true,
-    maxlength: [20, "username should be less than or equal to 20 characters"]
+    maxlength: [50, "username should be less than or equal to 20 characters"]
   },
   password: {
     type: String,

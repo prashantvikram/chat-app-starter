@@ -5,8 +5,5 @@
 }
 
 .ant-layout-content{
-  justify-content: center;
-  align-items: center;
-  display: flex;
   height: 92vh;
 }

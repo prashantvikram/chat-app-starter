@@ -1,13 +1,11 @@
 import * as React from "react";
-import { Component } from "react";
-import { Link } from 'react-router-dom';
 
 import { Form, Icon, Input, Button } from "antd";
-import { MemoryHistory } from 'history';
+
+import AuthContext from "../auth-context";
 
 interface IProps {
   form: any,
-  history: MemoryHistory
 }
 interface IState {}
 
@@ -17,18 +15,16 @@ function hasErrors(fieldsError: Error) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-
-class SignupForm extends Component<IProps, IState> {
+class SignupForm extends React.Component<IProps, IState> {
+  static contextType = AuthContext;
   constructor(props: IProps){
     super(props);
 
     this.getUsername = this.getUsername.bind(this);
   }
-  componentWillMount() {
-    this.getUsername();
-  }
 
   componentDidMount() {
+    this.getUsername();
     this.props.form.validateFields();
   }
 
@@ -57,7 +53,7 @@ class SignupForm extends Component<IProps, IState> {
         .then(json => {
           // tslint:disable-next-line:no-console
           console.log(json);
-          this.props.history.push('/');
+          this.context.toggleAuth();
         })
         .catch(error => {
           // tslint:disable-next-line:no-console
@@ -114,7 +110,6 @@ class SignupForm extends Component<IProps, IState> {
           >
             Sign Up
           </Button>
-          <Link to='/signin'>Already Registered? Sign In</Link>
         </FormItem>
       </Form>
     );

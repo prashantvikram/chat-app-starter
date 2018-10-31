@@ -29,5 +29,9 @@ export class User {
     // endpoint for logout
     app.route(`${endpoint}/logout`)
       .post(this.userController.logout);
+
+    // search user by username
+    app.route(`${endpoint}/search`)
+      .get(this.userController.search);
   }
 }

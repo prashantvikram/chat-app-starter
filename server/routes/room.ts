@@ -5,6 +5,9 @@ export class Room {
 
   public routes(endpoint: string, app: any): void {
     app.route(`${endpoint}/create_room`)
-      .get(this.roomController.createRoom);
+      .post(this.roomController.createRoom);
+
+    app.route(`${endpoint}/get_user_rooms`)
+      .get(this.roomController.getUserRooms);
   }
 }

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 const rug: any = require("random-username-generator");
 import { PassportStatic } from "passport";
-import { IUser } from "../models/user";
+import User, { IUser } from "../models/user";
 
 export class UserController {
 
@@ -37,7 +37,10 @@ export class UserController {
         if (err) { return next(err); }
 
         user.lastActive = new Date();
-        return res.json(info);
+        return res.json({
+          username: user.username,
+          id:user.id
+        });
       });
     })(req, res, next);
   }
@@ -52,7 +55,10 @@ export class UserController {
         if (err) { return next(err); }
 
         user.lastActive = new Date();
-        return res.json(info);
+        return res.json({
+          username: user.username,
+          id:user.id
+        });
       });
     })(req, res, next);
   }
@@ -60,5 +66,18 @@ export class UserController {
   public logout(req: Request, res: Response, next: NextFunction): any {
     req.logout();
     res.json({ message: "logged out successfully" });
+  }
+
+  public search(req: Request, res: Response, next: NextFunction): any {
+    console.log(req.query.username);
+    User.findOne({ "username": req.query.username }, (err: any, user: IUser) => {
+      if (err) {
+        return next(err);
+      }
+      if(user) {
+        return res.json(user.id);
+      }
+      return res.json({message:"not found"});
+    });
   }
 }

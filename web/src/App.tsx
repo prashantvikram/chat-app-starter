@@ -18,7 +18,9 @@ export interface IProps {}
 
 export interface IState {
   isAuth: boolean,
-  toggleAuth: any
+  toggleAuth: any,
+  userId: string,
+  username: string
 }
 
 class App extends Component<IProps, IState> {
@@ -27,7 +29,9 @@ class App extends Component<IProps, IState> {
     
     this.state = {
       isAuth: false,
-      toggleAuth: this.toggleAuth
+      toggleAuth: this.toggleAuth,
+      userId: "",
+      username: ""
     }
 
     this.checkExistingSession = this.checkExistingSession.bind(this);
@@ -48,6 +52,7 @@ class App extends Component<IProps, IState> {
       console.log(json)
       if (json.hasOwnProperty('passport')) {
         if (json.passport.hasOwnProperty('user')) {
+          this.setState({ userId: json.passport.user });
           this.toggleAuth();
         }
       }
@@ -62,7 +67,12 @@ class App extends Component<IProps, IState> {
   }
   public render() {
     return (
-      <AuthContext.Provider value={{ isAuth: this.state.isAuth, toggleAuth: this.state.toggleAuth }}>
+      <AuthContext.Provider value={{ 
+        isAuth: this.state.isAuth,
+        toggleAuth: this.state.toggleAuth,
+        userId: this.state.userId,
+        username: this.state.username
+         }}>
         <Layout>
             <AppHeader />
           <Content>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 
-import { Layout, Button } from 'antd';
+import { Layout, Button, Avatar, Popover } from 'antd';
 const { Header } = Layout;
 
 import AuthContext from "../auth-context";
@@ -22,10 +22,19 @@ class AppHeader extends Component<{}, {}>{
       })
   }
   render(){
+    const content = (
+      <div>
+        <Button onClick={this.logout.bind(this)}>Logout</Button>
+      </div>
+    );
     return(
       <Header>
         {this.context.isAuth ?
-          <Button onClick={this.logout.bind(this)}>Logout</Button>
+        <div>
+          <Popover content={content} title={this.context.userId} trigger="click" placement="bottomRight">
+              <Avatar size="large" src="https://api.adorable.io/avatars/face/eyes4/nose4/mouth10/FFF" />
+          </Popover>          
+        </div>
           : null
         }
         

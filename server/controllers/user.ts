@@ -14,8 +14,25 @@ export class UserController {
     this.signin = this.signin.bind(this);
   }
 
-  public getUserSession(req: Request, res: Response):any {
-    return res.json(req.session);
+  public getUserSession(req: Request, res: Response, next: NextFunction):any {
+    if (req.session !== undefined){
+      if(req.session.hasOwnProperty('passport')){
+        const id = req.session.passport.user;
+        User.findById(id, function (err, user) {
+          if (err) {
+            return next(err);
+          }
+          if (user) {
+            return res.json({
+              username: user.username,
+              id: user.id
+            });
+          }
+          return res.json({ message: "not found" });
+        });
+      }     
+    }
+    // return res.json({ message: "no session"});
   }
 
 
@@ -37,6 +54,7 @@ export class UserController {
         if (err) { return next(err); }
 
         user.lastActive = new Date();
+        user.isOnline = true;
         return res.json({
           username: user.username,
           id:user.id
@@ -55,6 +73,7 @@ export class UserController {
         if (err) { return next(err); }
 
         user.lastActive = new Date();
+        user.isOnline = true;
         return res.json({
           username: user.username,
           id:user.id
@@ -66,16 +85,27 @@ export class UserController {
   public logout(req: Request, res: Response, next: NextFunction): any {
     req.logout();
     res.json({ message: "logged out successfully" });
+
+    // // OR
+    // req.session.destroy(function (err) {
+    //   if (err) { return next(err) }
+
+    //   return res.json({ message: "User logged out successfully" });
+    // });
   }
 
-  public search(req: Request, res: Response, next: NextFunction): any {
+  public findByUsername(req: Request, res: Response, next: NextFunction): any {
     console.log(req.query.username);
     User.findOne({ "username": req.query.username }, (err: any, user: IUser) => {
       if (err) {
         return next(err);
       }
       if(user) {
-        return res.json(user.id);
+        return res.json({
+          username: user.username,
+          id: user.id,
+          isOnline: user.isOnline
+        });
       }
       return res.json({message:"not found"});
     });

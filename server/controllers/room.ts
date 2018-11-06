@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 // import app from "../app";
 // import v4 from "uuid/v4";
 import Room, { IRoom } from "../models/room";
+import Messages, { IMessages } from "../models/messages";
 import User from "../models/user";
 
 export class RoomController {
@@ -50,4 +51,13 @@ export class RoomController {
   // is typing
 
   // get all message from a conversation
+  public getMessages(req: Request, res: Response, next: NextFunction): any {
+    Messages.find({ "roomId": req.query.roomid }, function(err, messages) {
+      if(err) {
+        return next(err);
+      }
+
+      return res.json(messages);
+    })
+  }
 }

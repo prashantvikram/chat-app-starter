@@ -31,7 +31,7 @@ export class User {
       .post(this.userController.logout);
 
     // search user by username
-    app.route(`${endpoint}/search`)
-      .get(this.userController.search);
+    app.route(`${endpoint}/find_by_username`)
+      .get(this.userController.findByUsername);
   }
 }

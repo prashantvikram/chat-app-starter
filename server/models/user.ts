@@ -7,6 +7,7 @@ export interface IUser extends Document {
   username: String;
   password: String;
   lastActive: Date;
+  isOnline: Boolean;
   validatePassword: Function;
 }
 
@@ -21,6 +22,7 @@ export const UserSchema: Schema = new Schema({
     type: String,
     required: true
   },
+  isOnline: {type: Boolean, default: false},
   lastActive: { type: Date, default: Date.now, expires: 1209600 }
 }, { timestamps: true });
 

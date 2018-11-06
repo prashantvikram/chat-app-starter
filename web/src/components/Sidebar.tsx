@@ -1,44 +1,61 @@
 import * as React from "react";
-import { List, Avatar } from 'antd';
 
-import AuthContext from "../auth-context";
+import { Input, List, Avatar } from 'antd';
+const Search = Input.Search;
 
-interface IMember {
-  username: string
-}
-
-interface IRoom {
-  _id: string,
-  members: Array<IMember>
-}
+import { RoomModel, FriendModel, UserModel } from "../models";
 
 interface IProps {
-  rooms: Array<IRoom>,
+  user: UserModel
+  rooms: Array<RoomModel>,
+  selectRoom: any,
+  search: any,
+  searchResult: FriendModel
 }
 class Sidebar extends React.Component<IProps, {}>{
-  static contextType = AuthContext;
   render(){
     return(
-      // <ul>
-      //   {this.props.rooms.map((r,i) => {
-      //     r.members.splice(this.context.userId, 1)
-      //     return (
-      //       <li key={i}>{r.members[0].username}</li>
-      //     )
-      //   })}
-      // </ul>
-      <List
-        itemLayout="horizontal"
-        dataSource={this.props.rooms}
-        renderItem={(r: IRoom) => (
+      <div>
+        <Search
+          placeholder="input search text"
+          onSearch={value => this.props.search(value)}
+          style={{ width: 200 }}
+        />
+        {this.props.searchResult.hasOwnProperty('username') ?
           <List.Item>
             <List.Item.Meta
-              avatar={<Avatar src="https://api.adorable.io/avatars/face/eyes7/nose6/mouth7/000" />}
-              title={r.members[0].username}
+              avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+              title={this.props.searchResult.username}
             />
           </List.Item>
-        )}
-      />
+        :
+        null
+        }
+
+        <h2>Friends List</h2>
+        <ul>
+          {this.props.rooms.map((r, i) => {
+            if(r.members.length > 2){
+              return (
+                <li key={i}>
+                  {r._id}
+                </li>
+              ) 
+            } else {
+              return (
+                <li key={i} style={{ cursor: "pointer" }} onClick={() => this.props.selectRoom(r._id)}>
+                  <List.Item.Meta
+                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                    title={r.members.filter(m => { return m._id !== this.props.user.id })[0].username}
+                    description={<i>last message in this room</i>}
+                  />
+                </li>
+              )
+            }
+          })}
+        </ul>
+      </div>
+      
     )
   }
 }

@@ -7,93 +7,73 @@ const { Content } = Layout;
 const TabPane = Tabs.TabPane;
 
 // components
-import Home from "./components/Home";
+import Home from "./containers/Home";
 import Signin from "./components/Signin";
 import Signup from "./components/Signup";
 import AppHeader from "./components/AppHeader";
 
 import AuthContext from "./auth-context";
+import User from "./controllers/user";
 
 export interface IProps {}
 
 export interface IState {
-  isAuth: boolean,
-  toggleAuth: any,
-  userId: string,
-  username: string
+  isAuth: boolean
+  toggleAuth: any
 }
 
 class App extends Component<IProps, IState> {
+  public user = new User();
   constructor(props: IProps){
-    super(props);
-    
+    super(props);   
+
     this.state = {
       isAuth: false,
-      toggleAuth: this.toggleAuth,
-      userId: "",
-      username: ""
+      toggleAuth: this.toggleAuth
     }
 
-    this.checkExistingSession = this.checkExistingSession.bind(this);
     this.toggleAuth = this.toggleAuth.bind(this);
   }
-  componentWillMount(){
-    this.checkExistingSession();
+  componentDidMount(){
+    this.user.checkExistingSession()
+      .then(isAuth => this.toggleAuth(isAuth))
   }
-  checkExistingSession() {
-    fetch("/user/", {
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      method: "GET",
-    })
-    .then(res => res.json())
-    .then(json => {
-      console.log(json)
-      if (json.hasOwnProperty('passport')) {
-        if (json.passport.hasOwnProperty('user')) {
-          this.setState({ userId: json.passport.user });
-          this.toggleAuth();
-        }
-      }
-    });
+  signIn(values: any){
+    this.user.signin(values)
+      .then(isAuth => this.toggleAuth(isAuth))
   }
-  toggleAuth = () => {
-    this.setState(state =>{
-      return {
-        isAuth: !state.isAuth,
-      }
-    });
+  signUp(values: any) {
+    this.user.signin(values)
+      .then(isAuth => this.toggleAuth(isAuth))
+  }
+  toggleAuth = (isAuth: boolean) =>{
+    this.setState({ isAuth })
   }
   public render() {
     return (
-      <AuthContext.Provider value={{ 
-        isAuth: this.state.isAuth,
-        toggleAuth: this.state.toggleAuth,
-        userId: this.state.userId,
-        username: this.state.username
-         }}>
+      <AuthContext.Provider value={{isAuth: this.state.isAuth, toggleAuth: this.state.toggleAuth}}>
         <Layout>
-            <AppHeader />
+          <AppHeader user={this.user}/>
           <Content>
-            {this.state.isAuth ? <Home /> :
-              <Row type="flex" justify="center" align="middle" style={{height: 'inherit'}}>
+            {this.state.isAuth ? <Home user={this.user} /> :
+              <Row type="flex" justify="center" align="middle" style={{ height: 'inherit' }}>
                 <Col sm={20} md={10}>Col</Col>
                 <Col sm={20} md={10}>
                   <Tabs defaultActiveKey="2">
                     <TabPane tab="Signup" key="1">
-                      <Signup />
+                      <Signup callback={this.signUp.bind(this)} />
                     </TabPane>
                     <TabPane tab="Signin" key="2">
-                      <Signin />
+                      <Signin callback={this.signIn.bind(this)} />
                     </TabPane>
                   </Tabs>
                 </Col>
               </Row>
-            }            
+            }
           </Content>
         </Layout>
       </AuthContext.Provider>
+      
     );
   }
 }

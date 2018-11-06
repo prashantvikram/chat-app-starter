@@ -5,21 +5,16 @@ import { Layout, Button, Avatar, Popover } from 'antd';
 const { Header } = Layout;
 
 import AuthContext from "../auth-context";
+import User from 'src/controllers/user';
 
-class AppHeader extends Component<{}, {}>{
+interface IProps {
+  user: User
+}
+
+class AppHeader extends Component<IProps, {}>{
   static contextType = AuthContext;
   logout() {
-    fetch("/user/logout", {
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      method: "POST",
-    })
-      .then(res => res.json())
-      .then(json => {
-        console.log(json)
-        this.context.toggleAuth();
-      })
+    this.props.user.signout().then(isAuth => this.context.toggleAuth(isAuth))
   }
   render(){
     const content = (
@@ -31,7 +26,7 @@ class AppHeader extends Component<{}, {}>{
       <Header>
         {this.context.isAuth ?
         <div>
-          <Popover content={content} title={this.context.userId} trigger="click" placement="bottomRight">
+          <Popover content={content} title={this.props.user.username} trigger="click" placement="bottomRight">
               <Avatar size="large" src="https://api.adorable.io/avatars/face/eyes4/nose4/mouth10/FFF" />
           </Popover>          
         </div>

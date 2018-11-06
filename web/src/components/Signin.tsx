@@ -6,6 +6,7 @@ import AuthContext from "../auth-context";
 
 interface IProps {
   form: any,
+  callback: Function
 }
 interface IState {}
 
@@ -29,23 +30,7 @@ class SigninForm extends React.Component<IProps, IState> {
     this.props.form.validateFields((err: Error, values: any) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        fetch("/user/signin", {
-          body: JSON.stringify(values),
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-          },
-          method: "POST",
-        })
-          .then(res => res.json())
-          .then(json => {
-            // tslint:disable-next-line:no-console
-            console.log(json);
-            this.context.toggleAuth();
-          })
-          .catch(error => {
-            // tslint:disable-next-line:no-console
-            console.log(error);
-          })
+        this.props.callback(values);
       }
     });
   }

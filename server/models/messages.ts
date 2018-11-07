@@ -5,7 +5,7 @@ import Room from "./room";
 export interface IMessages extends Document {
   roomId: Schema.Types.ObjectId;
   message: string;
-  to: Schema.Types.ObjectId;
+  // to: Schema.Types.ObjectId;
   from: Schema.Types.ObjectId;
   date: Date;
 }
@@ -19,10 +19,10 @@ export const MessagesSchema: Schema = new Schema({
     type: String,
     required: true
   },
-  to: {
-    type: Schema.Types.ObjectId,
-    ref: User
-  },
+  // to: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: User
+  // },
   from: {
     type: Schema.Types.ObjectId,
     ref: User
@@ -33,7 +33,7 @@ export const MessagesSchema: Schema = new Schema({
   }
 }, { timestamps: true });
 
-MessagesSchema.index({ to: 1, from: 1 }, { unique: true });
+// MessagesSchema.index({ to: 1, from: 1 }, { unique: true });
 
 const Messages: Model<IMessages> = model<IMessages>("Messages", MessagesSchema);
 export default Messages;

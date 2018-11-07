@@ -60,4 +60,16 @@ export class RoomController {
       return res.json(messages);
     })
   }
+
+  public addMessage(req: Request, res: Response, next: NextFunction): any{
+
+    let newMessage: IMessages = new Messages(req.body);
+    console.log(req.body)
+    newMessage.save(function(err: any, message: IMessages): any {
+      if(err){
+        return next(err);
+      }
+      return res.json(message.id);
+    })
+  }
 }

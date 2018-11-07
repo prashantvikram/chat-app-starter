@@ -103,6 +103,32 @@ class User {
     return json
   }
 
+  async getRoomMessages(id: string) {
+    let response = await fetch(`/rooms/get_messages?roomid=${id}`, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      method: "GET",
+    })
+    let json = await response.json();
+    return json
+  }
+
+  async addMessage (message: string, roomId: string){
+    let values = {
+      roomId: roomId,
+      message: message,
+      from: this.id
+    }
+    let response = await fetch("/rooms/add_message", {
+      headers: {"Content-Type": "application/json; charset=utf-8",},
+      body: JSON.stringify(values),
+      method: "POST",
+    })
+    let json = await response.json();
+    return json;
+  }
+
 }
 
 export default User;

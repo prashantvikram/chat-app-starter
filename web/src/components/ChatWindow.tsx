@@ -1,9 +1,15 @@
 import * as React from "react";
+import { MessageModel } from 'src/models';
 
-class ChatWindow extends React.Component<{}, {}>{
+interface IProps {
+  roomMessages: Array<MessageModel>
+}
+
+class ChatWindow extends React.Component<IProps, {}>{
   render(){
+    console.log(this.props.roomMessages)
     return(
-      <div>chat window</div>
+      <div>Chat Window</div>
     )
   }
 }

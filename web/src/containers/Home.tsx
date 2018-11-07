@@ -15,8 +15,9 @@ interface IProps {
 }
 interface IState {
   rooms: Array<RoomModel>,
-  searchResult: FriendModel
-  roomMessages: Array<MessageModel>
+  searchResult: FriendModel,
+  roomMessages: Array<MessageModel>,
+  selectedRoomId: string
 }
 
 class Home extends React.Component<IProps, IState> {
@@ -27,7 +28,8 @@ class Home extends React.Component<IProps, IState> {
     this.state = {
       rooms: [],
       searchResult: {} as FriendModel,
-      roomMessages: []
+      roomMessages: [],
+      selectedRoomId: ""
     }
   }  
 
@@ -45,8 +47,15 @@ class Home extends React.Component<IProps, IState> {
     .then(searchResult => this.setState({searchResult}));
   }
 
-  getRoomConversation(id: string){
-    console.log(id)
+  getRoomMessages(id: string){
+    this.setState({selectedRoomId: id})
+    this.props.user.getRoomMessages(id)
+      .then(roomMessages => this.setState({ roomMessages }))
+  }
+
+  sendMessage(message: string){
+    this.props.user.addMessage(message, this.state.selectedRoomId)
+      .then((json: any) => console.log(json))
   }
 
   render() {
@@ -56,13 +65,13 @@ class Home extends React.Component<IProps, IState> {
           <Sidebar
             user={this.props.user}
             rooms={this.state.rooms}
-            selectRoom={this.getRoomConversation}
+            selectRoom={this.getRoomMessages.bind(this)}
             search={this.searchUsers.bind(this)}
             searchResult={this.state.searchResult} />
         </Sider>
         <Content>
-          <ChatWindow />
-          <MessageForm />
+          <ChatWindow roomMessages={this.state.roomMessages}/>
+          <MessageForm callback={this.sendMessage.bind(this)}/>
         </Content>
       </Layout>
     )

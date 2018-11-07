@@ -10,7 +10,10 @@ export class Room {
     app.route(`${endpoint}/get_user_rooms`)
       .get(this.roomController.getUserRooms);
 
-    app.route(`${endpoint}/messages`)
+    app.route(`${endpoint}/get_messages`)
       .get(this.roomController.getMessages);
+
+    app.route(`${endpoint}/add_message`)
+      .post(this.roomController.addMessage);
   }
 }

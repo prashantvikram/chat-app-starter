@@ -43,7 +43,7 @@ class App extends Component<IProps, IState> {
       .then(isAuth => this.toggleAuth(isAuth))
   }
   signUp(values: any) {
-    this.user.signin(values)
+    this.user.signup(values)
       .then(isAuth => this.toggleAuth(isAuth))
   }
   toggleAuth = (isAuth: boolean) =>{

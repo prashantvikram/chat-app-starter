@@ -96,6 +96,19 @@ class User {
     return json
   }
 
+  async createRoom(friendId: string) {
+    let values = {
+      members: [friendId, this.userProps._id]
+    }
+    let response = await fetch("/rooms/create_room", {
+      headers: { "Content-Type": "application/json; charset=utf-8", },
+      body: JSON.stringify(values),
+      method: "POST",
+    })
+    let json = await response.json();
+    return json;
+  }
+
   async getRoomMessages(id: string) {
     let response = await fetch(`/rooms/get_messages?roomid=${id}`, {
       headers: {

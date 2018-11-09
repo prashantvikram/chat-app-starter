@@ -10,6 +10,7 @@ interface IProps {
   rooms: Array<RoomModel>,
   selectRoom: any,
   search: any,
+  createRoom: any,
   searchResult: UserModel
 }
 class Sidebar extends React.Component<IProps, {}>{
@@ -22,12 +23,14 @@ class Sidebar extends React.Component<IProps, {}>{
           style={{ width: 200 }}
         />
         {this.props.searchResult.hasOwnProperty('username') ?
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-              title={this.props.searchResult.username}
-            />
-          </List.Item>
+          <div onClick={() => this.props.createRoom(this.props.searchResult._id)}>
+            <List.Item>
+              <List.Item.Meta
+                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                title={this.props.searchResult.username}
+              />
+            </List.Item>
+          </div>
         :
         null
         }

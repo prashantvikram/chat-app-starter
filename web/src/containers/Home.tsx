@@ -47,6 +47,14 @@ class Home extends React.Component<IProps, IState> {
     .then(searchResult => this.setState({searchResult}));
   }
 
+  createRoom(friendId: string){
+    this.props.user.createRoom(friendId)
+      .then(room => this.setState({
+        rooms: [...this.state.rooms, room],
+        selectedRoomId: room._id
+      }))
+  }
+
   getRoomMessages(id: string){
     this.setState({selectedRoomId: id})
     this.props.user.getRoomMessages(id)
@@ -67,6 +75,7 @@ class Home extends React.Component<IProps, IState> {
             rooms={this.state.rooms}
             selectRoom={this.getRoomMessages.bind(this)}
             search={this.searchUsers.bind(this)}
+            createRoom={this.createRoom.bind(this)}
             searchResult={this.state.searchResult} />
         </Sider>
         <Content>

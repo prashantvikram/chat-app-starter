@@ -30,13 +30,22 @@ export class RoomController {
     // nsp.on("connection", function (socket: socketIO.Socket): void {
     //   console.log("added...");
     // });
-
     let newRoom: IRoom = new Room (req.body);
     newRoom.save(function(err: any, room: IRoom): any {
-      if(err) {
+      if (err) {
         return next(err);
       }
-      return res.json(room.id);
+      
+      Room.findById(room._id)
+        .populate({ path: "members", select: "username", model: User })
+        .exec(
+          function (err: any, rooms: IRoom[]): any {
+            if (err) {
+              return next(err);
+            }
+            return res.json(rooms);
+          }
+        );
     });
   }
 

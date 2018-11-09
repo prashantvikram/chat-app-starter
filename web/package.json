@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/react-redux": "^6.0.9",
     "antd": "^3.10.3",
+    "human-date": "^1.4.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",

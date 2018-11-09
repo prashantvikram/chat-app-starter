@@ -1,5 +1,11 @@
 @import '~antd/dist/antd.css';
 
+ul{
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
 .ant-layout-header{
   height: 8vh;
 }

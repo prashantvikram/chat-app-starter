@@ -56,10 +56,15 @@ export class UserController {
 
         user.lastActive = new Date();
         user.isOnline = true;
-        return res.json({
-          _id: user.id,
-          username: user.username,
-          isOnline: user.isOnline
+        
+        user.save(function (err, updatedUser) {
+          if (err) { return next(err); }
+
+          return res.json({
+            _id: updatedUser.id,
+            username: updatedUser.username,
+            isOnline: updatedUser.isOnline
+          });
         });
       });
     })(req, res, next);
@@ -76,25 +81,49 @@ export class UserController {
 
         user.lastActive = new Date();
         user.isOnline = true;
-        return res.json({
-          _id: user.id,
-          username: user.username,
-          isOnline: user.isOnline
-        });
+
+        user.save(function(err, updatedUser) {
+          if (err) { return next(err); }
+
+          return res.json({
+            _id: updatedUser.id,
+            username: updatedUser.username,
+            isOnline: updatedUser.isOnline
+          });
+        });        
       });
     })(req, res, next);
   }
 
   public logout(req: Request, res: Response, next: NextFunction): any {
-    req.logout();
-    res.json({ message: "logged out successfully" });
+    // req.logout();
+    // res.json({ message: "logged out successfully" });
 
     // // OR
-    // req.session.destroy(function (err) {
-    //   if (err) { return next(err) }
+    
+    if (req.session !== undefined) {
+      if (req.session.hasOwnProperty('passport')) {
+        const id = req.session.passport.user;
+        User.findById(id, function (err, user) {
+          if (err) { return next(err); }
 
-    //   return res.json({ message: "User logged out successfully" });
-    // });
+          if(user){
+            user.isOnline = false;
+            user.save(function(err, updatedUser){
+              if (err) { return next(err); }
+
+              if (req.session) {
+                req.session.destroy(function (err) {
+                  if (err) { return next(err) }
+
+                  return res.json({ message: "User logged out successfully" });
+                });
+              }
+            })
+          }
+        });
+      }
+    }
   }
 
   public findByUsername(req: Request, res: Response, next: NextFunction): any {

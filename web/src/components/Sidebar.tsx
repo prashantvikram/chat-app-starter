@@ -47,8 +47,14 @@ class Sidebar extends React.Component<IProps, {}>{
             } else {
               const f = r.members.filter(m => { return m._id !== this.props.user._id })[0];
               return (
-                <li key={i} style={{ cursor: "pointer" }} onClick={() => this.props.selectRoom(r._id)}>                  
-                  <List.Item.Meta style={f.isOnline ? { backgroundColor: '#FFF' } : { backgroundColor: '#DDD' }}
+                <li 
+                  key={i} 
+                  style={{
+                    backgroundColor: f.isOnline ? '#f0f5ff' : '#DDD',
+                    cursor: "pointer"
+                  }}
+                  onClick={() => this.props.selectRoom(r._id)}>                  
+                  <List.Item.Meta                    
                     avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                     title={f.username}
                     description={<i>last message in this room</i>}

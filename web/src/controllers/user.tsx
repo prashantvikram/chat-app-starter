@@ -120,15 +120,15 @@ class User {
     return json
   }
 
-  async addMessage (message: string, roomId: string){
-    let values: MessageModel = {
-      roomId: roomId,
-      message: message,
-      from: this.userProps
-    }
+  async addMessage(value: MessageModel){
+    // let values: MessageModel = {
+    //   roomId: roomId,
+    //   message: message,
+    //   from: this.userProps
+    // }
     let response = await fetch("/rooms/add_message", {
       headers: {"Content-Type": "application/json; charset=utf-8",},
-      body: JSON.stringify(values),
+      body: JSON.stringify(value),
       method: "POST",
     })
     let json = await response.json();

@@ -62,7 +62,13 @@ class Home extends React.Component<IProps, IState> {
   }
 
   sendMessage(message: string){
-    this.props.user.addMessage(message, this.state.selectedRoomId)
+    let value = {
+      roomId: this.state.selectedRoomId,
+      message: message,
+      from: this.props.user.userProps
+    }
+    this.setState({ roomMessages: [...this.state.roomMessages, value]})
+    this.props.user.addMessage(value)
       .then((json: any) => console.log(json))
   }
 

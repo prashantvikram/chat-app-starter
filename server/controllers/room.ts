@@ -10,7 +10,7 @@ import User from "../models/user";
 export class RoomController {
   public getUserRooms(req: Request, res: Response, next: NextFunction): any {
     Room.find({ "members": req.query.id })
-        .populate({ path: "members", select: "username", model: User })
+        .populate({ path: "members", select: "username isOnline", model: User })
         .exec(
           function(err: any, rooms: IRoom[]): any {
             if (err) {
@@ -76,7 +76,6 @@ export class RoomController {
   public addMessage(req: Request, res: Response, next: NextFunction): any{
 
     let newMessage: IMessages = new Messages(req.body);
-    console.log(req.body)
     newMessage.save(function(err: any, message: IMessages): any {
       if(err){
         return next(err);

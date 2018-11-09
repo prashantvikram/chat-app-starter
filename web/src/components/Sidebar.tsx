@@ -3,14 +3,14 @@ import * as React from "react";
 import { Input, List, Avatar } from 'antd';
 const Search = Input.Search;
 
-import { RoomModel, FriendModel, UserModel } from "../models";
+import { RoomModel, UserModel } from "../models";
 
 interface IProps {
   user: UserModel
   rooms: Array<RoomModel>,
   selectRoom: any,
   search: any,
-  searchResult: FriendModel
+  searchResult: UserModel
 }
 class Sidebar extends React.Component<IProps, {}>{
   render(){
@@ -46,7 +46,7 @@ class Sidebar extends React.Component<IProps, {}>{
                 <li key={i} style={{ cursor: "pointer" }} onClick={() => this.props.selectRoom(r._id)}>
                   <List.Item.Meta
                     avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                    title={r.members.filter(m => { return m._id !== this.props.user.id })[0].username}
+                    title={r.members.filter(m => { return m._id !== this.props.user._id })[0].username}
                     description={<i>last message in this room</i>}
                   />
                 </li>

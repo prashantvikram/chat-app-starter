@@ -52,13 +52,16 @@ export class RoomController {
 
   // get all message from a conversation
   public getMessages(req: Request, res: Response, next: NextFunction): any {
-    Messages.find({ "roomId": req.query.roomid }, function(err, messages) {
-      if(err) {
-        return next(err);
-      }
-
-      return res.json(messages);
-    })
+    Messages.find({ "roomId": req.query.roomid })
+      .populate({ path: "from", select: "username", model: User })
+      .exec(
+        function (err: any, messages: IMessages[]): any {
+          if (err) {
+            return next(err);
+          }
+          return res.json(messages);
+        }
+      );
   }
 
   public addMessage(req: Request, res: Response, next: NextFunction): any{

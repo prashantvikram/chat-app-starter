@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 const { Sider, Content } = Layout;
 
 import AuthContext from "../auth-context";
-import { RoomModel, MessageModel, FriendModel } from "../models";
+import { RoomModel, MessageModel, UserModel } from "../models";
 import User from "../controllers/user";
 
 import Sidebar from "../components/Sidebar";
@@ -15,7 +15,7 @@ interface IProps {
 }
 interface IState {
   rooms: Array<RoomModel>,
-  searchResult: FriendModel,
+  searchResult: UserModel,
   roomMessages: Array<MessageModel>,
   selectedRoomId: string
 }
@@ -27,7 +27,7 @@ class Home extends React.Component<IProps, IState> {
 
     this.state = {
       rooms: [],
-      searchResult: {} as FriendModel,
+      searchResult: {} as UserModel,
       roomMessages: [],
       selectedRoomId: ""
     }
@@ -63,14 +63,16 @@ class Home extends React.Component<IProps, IState> {
       <Layout>
         <Sider style={{ background: '#fff' }}>
           <Sidebar
-            user={this.props.user}
+            user={this.props.user.userProps}
             rooms={this.state.rooms}
             selectRoom={this.getRoomMessages.bind(this)}
             search={this.searchUsers.bind(this)}
             searchResult={this.state.searchResult} />
         </Sider>
         <Content>
-          <ChatWindow roomMessages={this.state.roomMessages}/>
+          <ChatWindow
+            roomMessages={this.state.roomMessages} 
+            user={this.props.user.userProps}/>
           <MessageForm callback={this.sendMessage.bind(this)}/>
         </Content>
       </Layout>

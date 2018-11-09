@@ -55,7 +55,7 @@ class App extends Component<IProps, IState> {
         <Layout>
           <AppHeader user={this.user}/>
           <Content>
-            {this.state.isAuth ? <Home user={this.user} /> :
+            {this.state.isAuth ? <Home user={this.user}/> :
               <Row type="flex" justify="center" align="middle" style={{ height: 'inherit' }}>
                 <Col sm={20} md={10}>Col</Col>
                 <Col sm={20} md={10}>

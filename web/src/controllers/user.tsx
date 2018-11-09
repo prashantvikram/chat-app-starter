@@ -1,19 +1,11 @@
-import { UserModel } from "../models";
+import { UserModel, MessageModel } from "../models";
 
 class User {
   
-  constructor(public id: string = "", public username: string = ""){}
+  constructor(public userProps: UserModel = {} as UserModel){}
 
-  setUser = (creds: UserModel) =>{
-    this.id = creds.id
-    this.username = creds.username;
-  }
-
-  getUser(){
-    return {
-      id: this.id,
-      username: this.username
-    }
+  setUser = (userProps: UserModel) =>{
+    this.userProps = userProps
   }
 
   async checkExistingSession(){
@@ -24,7 +16,7 @@ class User {
       method: "GET",
     })
     let json = await response.json();
-    if (json.hasOwnProperty('id') && json.hasOwnProperty('username')) {
+    if (json.hasOwnProperty('_id') && json.hasOwnProperty('username')) {
       this.setUser(json);
       return true; // session found; return value for isAuth
     }
@@ -41,7 +33,8 @@ class User {
       method: "POST",
     });
     let json = await response.json();
-    if(json.hasOwnProperty('id') && json.hasOwnProperty('username')){
+    console.log(json)
+    if(json.hasOwnProperty('_id') && json.hasOwnProperty('username')){
       this.setUser(json);
       return true; // sign in success; return value for isAuth
     }
@@ -57,7 +50,7 @@ class User {
     });
     let json = await response.json();
 
-    if (json.hasOwnProperty('id') && json.hasOwnProperty('username')) {
+    if (json.hasOwnProperty('_id') && json.hasOwnProperty('username')) {
       this.setUser(json);
       return true; // sign up success; return value for isAuth
     }
@@ -73,8 +66,8 @@ class User {
     })
     let json = await response.json();
     if (json.message === "logged out successfully"){
-      this.id = "";
-      this.username = "";
+      this.userProps.isOnline = false;
+      this.userProps._id = this.userProps.username = "";
       return false // return value for isAuth
     }
 
@@ -82,7 +75,7 @@ class User {
   }
 
   async getRooms() {
-    let response = await fetch(`/rooms/get_user_rooms?id=${this.id}`, {
+    let response = await fetch(`/rooms/get_user_rooms?id=${this.userProps._id}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
@@ -115,10 +108,10 @@ class User {
   }
 
   async addMessage (message: string, roomId: string){
-    let values = {
+    let values: MessageModel = {
       roomId: roomId,
       message: message,
-      from: this.id
+      from: this.userProps
     }
     let response = await fetch("/rooms/add_message", {
       headers: {"Content-Type": "application/json; charset=utf-8",},

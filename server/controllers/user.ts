@@ -24,8 +24,9 @@ export class UserController {
           }
           if (user) {
             return res.json({
+              _id: user.id,
               username: user.username,
-              id: user.id
+              isOnline: user.isOnline
             });
           }
           return res.json({ message: "not found" });
@@ -56,8 +57,9 @@ export class UserController {
         user.lastActive = new Date();
         user.isOnline = true;
         return res.json({
+          _id: user.id,
           username: user.username,
-          id:user.id
+          isOnline: user.isOnline
         });
       });
     })(req, res, next);
@@ -75,8 +77,9 @@ export class UserController {
         user.lastActive = new Date();
         user.isOnline = true;
         return res.json({
+          _id: user.id,
           username: user.username,
-          id:user.id
+          isOnline: user.isOnline
         });
       });
     })(req, res, next);
@@ -101,11 +104,7 @@ export class UserController {
         return next(err);
       }
       if(user) {
-        return res.json({
-          username: user.username,
-          id: user.id,
-          isOnline: user.isOnline
-        });
+        return res.json(user);
       }
       return res.json({message:"not found"});
     });

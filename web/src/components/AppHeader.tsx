@@ -26,7 +26,7 @@ class AppHeader extends Component<IProps, {}>{
       <Header>
         {this.context.isAuth ?
         <div>
-          <Popover content={content} title={this.props.user.username} trigger="click" placement="bottomRight">
+          <Popover content={content} title={this.props.user.userProps.username} trigger="click" placement="bottomRight">
               <Avatar size="large" src="https://api.adorable.io/avatars/face/eyes4/nose4/mouth10/FFF" />
           </Popover>          
         </div>
